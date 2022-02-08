@@ -1,11 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-	use Session;
+use crocodicstudio\crudbooster\helpers\CB;
+use Session;
 	use Request;
-	use DB;
+	use Illuminate\Support\Facades\DB;
 	use CRUDBooster;
 
-	class AdminTransactionsController extends \crocodicstudio\crudbooster\controllers\CBController {
+class AdminTransactionsController extends \crocodicstudio\crudbooster\controllers\CBController {
 
 	    public function cbInit() {
 
@@ -89,6 +90,7 @@
 	        | 
 	        */
 	        $this->addaction = array();
+			$this->addaction[] = ['label'=>'Shipping','url'=>CRUDBooster::mainpath('shipping/[id]').'?return_url='.Request::url(),'icon'=>'fa fa-road','color'=>'warning','showIf'=>"in_array([status], ['Proccess','Shipping','Success'])"];
 
 
 	        /* 
@@ -336,6 +338,33 @@
 
 
 	    //By the way, you can still create your own method in here... :) 
+		public function getShipping($id) {
+			$data['row'] = optional(DB::table('shippings')->where('transactions_id', $id)->first());
+			$data['transaction'] = DB::table('transactions')->where('id', $id)->first();
 
+			return $this->view('admin.shippings.index', $data);
+		}
+
+		public function postShipping($id) {
+			$transactions = DB::table('transactions')->where('id', $id)->first();
+
+			$shipping = DB::table('shippings')->updateOrInsert([
+				'transactions_id' => $id,
+			], [
+				'address_id' => $transactions->address_id,
+				'courier' => g('courier'),
+				'resi' => g('resi'),
+				'address' => g('address'),
+				'created_at' => date('Y-m-d H:i:s'),
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			$update = DB::table('transactions')->where('id', $id)->update([
+				'status' => 'Shipping',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			CB::redirectBack('Shipping success!', 'success');
+		}
 
 	}
