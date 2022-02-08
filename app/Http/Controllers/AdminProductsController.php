@@ -30,11 +30,12 @@
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
+			$this->col[] = ["label"=>"Image","name"=>"images","image"=>true];
 			$this->col[] = ["label"=>"Name","name"=>"name"];
 			$this->col[] = ["label"=>"Location","name"=>"location"];
 			$this->col[] = ["label"=>"Size","name"=>"size"];
 			$this->col[] = ["label"=>"Stock","name"=>"stock"];
-			$this->col[] = ["label"=>"Price","name"=>"price", "callback_php"=>'number_format($row->price, 0, ",", ".")'];
+			$this->col[] = ["label"=>"Price","name"=>"price","callback_php"=>'number_format($row->price, 0, ",", ".")'];
 			$this->col[] = ["label"=>"Category","name"=>"categories_id","join"=>"categories,name"];
 			$this->col[] = ["label"=>"Sub Category","name"=>"sub_categories_id","join"=>"sub_categories,name"];
 			$this->col[] = ["label"=>"Seen Total","name"=>"seen_total"];
@@ -45,9 +46,9 @@
 			$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
 			$this->form[] = ['label'=>'Images','name'=>'images','type'=>'upload','validation'=>'required|image','width'=>'col-sm-9'];
 			$this->form[] = ['label'=>'Permalink','name'=>'permalink','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-			$this->form[] = ['label'=>'Description','name'=>'description','type'=>'wysiwyg','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10','datatable'=>'categories,name'];
-			$this->form[] = ['label'=>'Category','type'=>'select','name'=>'categories_id','datatable'=>'categories,name'];
-			$this->form[] = ['label'=>'Sub Category','type'=>'select','name'=>'sub_categories_id','datatable'=>'sub_categories,name','parent_select'=>'categories_id'];
+			$this->form[] = ['label'=>'Description','name'=>'description','type'=>'wysiwyg','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Category','name'=>'categories_id','type'=>'select','width'=>'col-sm-10','datatable'=>'categories,name'];
+			$this->form[] = ['label'=>'Sub Category','name'=>'sub_categories_id','type'=>'select','width'=>'col-sm-10','datatable'=>'sub_categories,name','parent_select'=>'categories_id'];
 			$this->form[] = ['label'=>'Location','name'=>'location','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Price','name'=>'price','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Size','name'=>'size','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
@@ -57,6 +58,7 @@
 			# OLD START FORM
 			//$this->form = [];
 			//$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
+			//$this->form[] = ['label'=>'Images','name'=>'images','type'=>'upload','validation'=>'required|image','width'=>'col-sm-9'];
 			//$this->form[] = ['label'=>'Permalink','name'=>'permalink','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Description','name'=>'description','type'=>'wysiwyg','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Category','name'=>'categories_id','type'=>'select','width'=>'col-sm-10','datatable'=>'categories,name'];
@@ -65,7 +67,6 @@
 			//$this->form[] = ['label'=>'Price','name'=>'price','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Size','name'=>'size','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			//$this->form[] = ['label'=>'Stock','name'=>'stock','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-			//$this->form[] = ['label'=>'Images','name'=>'images','type'=>'json','validation'=>'required','width'=>'col-sm-9'];
 			# OLD END FORM
 
 			/* 
