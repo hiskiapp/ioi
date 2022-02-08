@@ -46,8 +46,8 @@
 			$this->form[] = ['label'=>'Images','name'=>'images','type'=>'upload','validation'=>'required|image','width'=>'col-sm-9'];
 			$this->form[] = ['label'=>'Permalink','name'=>'permalink','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Description','name'=>'description','type'=>'wysiwyg','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10','datatable'=>'categories,name'];
-			$this->form[] = ['label'=>'Category','name'=>'categories_id','type'=>'select','width'=>'col-sm-10','datatable'=>'sub_categories,name','parent_select'=>'categories_id'];
-			$this->form[] = ['label'=>'Sub Category','name'=>'sub_categories_id','type'=>'select','width'=>'col-sm-10'];
+			$this->form[] = ['label'=>'Category','type'=>'select','name'=>'categories_id','datatable'=>'categories,name'];
+			$this->form[] = ['label'=>'Sub Category','type'=>'select','name'=>'sub_categories_id','datatable'=>'sub_categories,name','parent_select'=>'categories_id'];
 			$this->form[] = ['label'=>'Location','name'=>'location','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Price','name'=>'price','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 			$this->form[] = ['label'=>'Size','name'=>'size','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
