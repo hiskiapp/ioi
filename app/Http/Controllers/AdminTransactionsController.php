@@ -31,13 +31,93 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 
 			# START COLUMNS DO NOT REMOVE THIS LINE
 			$this->col = [];
+			$this->col[] = ["label"=>"Created at","name"=>"created_at"];
 			$this->col[] = ["label"=>"Code","name"=>"code"];
 			$this->col[] = ["label"=>"User","name"=>"users_id","join"=>"users,name"];
 			$this->col[] = ["label"=>"Payment Method","name"=>"payment_methods_id","join"=>"payment_methods,name"];
-			$this->col[] = ["label"=>"Address","name"=>"address_id","join"=>"address,receive_name"];
 			$this->col[] = ["label"=>"Total Price","name"=>"total_price","callback_php"=>'number_format($row->total_price, 0, ",", ".")'];
 			$this->col[] = ["label"=>"Total Item","name"=>"total_item"];
-			$this->col[] = ["label"=>"Status","name"=>"status"];
+			$this->col[] = ["label"=>"Status","name"=>"status","callback"=>function($row){
+				$class = [
+					'Unpaid' => 'warning',
+					'Checking' => 'info',
+					'Proccess' => 'primary',
+					'Shipping' => 'danger',
+					'Success' => 'success',
+					'Expired' => 'secondary',
+				];
+				$res = "<div class='dropdown'>
+				<button type='button' class='btn btn-{$class[$row->status]} btn-xs btn-document dropdown-toggle' data-toggle='dropdown'>
+				<span class='fa fa-list'></span> {$row->status} <span class='fa fa-caret-down'></span>
+				</button>
+				<ul class='dropdown-menu'>
+				<li>
+				<a href='javascript:void(0)' onclick='swal({
+					title: &quot;Set to Unpaid ?&quot;,
+					text: &quot;&quot;,
+					type: &quot;warning&quot;,
+					showCancelButton: true,
+					confirmButtonColor: &quot;#3C8DBC&quot;,
+					confirmButtonText: &quot;Ya!&quot;,
+					cancelButtonText: &quot;Tidak&quot;,
+					closeOnConfirm: false },
+					function(){  location.href=&quot;" .CRUDBooster::mainPath('unpaid/').$row->id."&quot; });'>Unpaid</a>
+					</li>
+					<li>
+				<a href='javascript:void(0)' onclick='swal({
+					title: &quot;Set to Checking ?&quot;,
+					text: &quot;&quot;,
+					type: &quot;warning&quot;,
+					showCancelButton: true,
+					confirmButtonColor: &quot;#3C8DBC&quot;,
+					confirmButtonText: &quot;Ya!&quot;,
+					cancelButtonText: &quot;Tidak&quot;,
+					closeOnConfirm: false },
+					function(){  location.href=&quot;" .CRUDBooster::mainPath('checking/').$row->id."&quot; });'>Checking</a>
+					</li>
+				<li>
+				<a href='javascript:void(0)' onclick='swal({
+					title: &quot;Set to Process ?&quot;,
+					text: &quot;&quot;,
+					type: &quot;warning&quot;,
+					showCancelButton: true,
+					confirmButtonColor: &quot;#3C8DBC&quot;,
+					confirmButtonText: &quot;Ya!&quot;,
+					cancelButtonText: &quot;Tidak&quot;,
+					closeOnConfirm: false },
+					function(){  location.href=&quot;" .CRUDBooster::mainPath('proccess/').$row->id."&quot; });'>Proccess</a>
+					</li>
+					<li>
+					<a href='".CRUDBooster::mainPath('shipping/').$row->id."'>Shipping</a>
+					</li>
+					<li>
+					<a href='javascript:void(0)' onclick='swal({
+						title: &quot;Set to Success ?&quot;,
+						text: &quot;&quot;,
+						type: &quot;warning&quot;,
+						showCancelButton: true,
+						confirmButtonColor: &quot;#3C8DBC&quot;,
+						confirmButtonText: &quot;Ya!&quot;,
+						cancelButtonText: &quot;Tidak&quot;,
+						closeOnConfirm: false },
+						function(){  location.href=&quot;" .CRUDBooster::mainPath('success/').$row->id."&quot; });'>Success</a>
+						</li>
+						<li>
+						<a href='javascript:void(0)' onclick='swal({
+							title: &quot;Set to Expired ?&quot;,
+							text: &quot;&quot;,
+							type: &quot;warning&quot;,
+							showCancelButton: true,
+							confirmButtonColor: &quot;#3C8DBC&quot;,
+							confirmButtonText: &quot;Ya!&quot;,
+							cancelButtonText: &quot;Tidak&quot;,
+							closeOnConfirm: false },
+							function(){  location.href=&quot;" .CRUDBooster::mainPath('expired/').$row->id."&quot; });'>Expired</a>
+							</li>
+						</ul>
+						</div>";
+						return $res;
+					}];
 			# END COLUMNS DO NOT REMOVE THIS LINE
 
 			# START FORM DO NOT REMOVE THIS LINE
@@ -338,6 +418,33 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 
 
 	    //By the way, you can still create your own method in here... :) 
+		public function getUnpaid($id) {
+			$update = DB::table('transactions')->where('id', $id)->update([
+				'status' => 'Unpaid',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			CB::redirectBack('Set transaction to unpaid successfully!', 'success');
+		}
+
+		public function getChecking($id) {
+			$update = DB::table('transactions')->where('id', $id)->update([
+				'status' => 'Checking',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			CB::redirectBack('Set transaction to checking successfully!', 'success');
+		}
+
+		public function getProccess($id) {
+			$update = DB::table('transactions')->where('id', $id)->update([
+				'status' => 'Proccess',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			CB::redirectBack('Set transaction to proccess successfully!', 'success');
+		}
+
 		public function getShipping($id) {
 			$data['row'] = optional(DB::table('shippings')->where('transactions_id', $id)->first());
 			$data['transaction'] = DB::table('transactions')->where('id', $id)->first();
@@ -365,6 +472,24 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 			]);
 
 			CB::redirectBack('Shipping success!', 'success');
+		}
+
+		public function getSuccess($id) {
+			$update = DB::table('transactions')->where('id', $id)->update([
+				'status' => 'Success',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			CB::redirectBack('Set transaction to success successfully!', 'success');
+		}
+
+		public function getExpired($id) {
+			$update = DB::table('transactions')->where('id', $id)->update([
+				'status' => 'Expired',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			CB::redirectBack('Set transaction to expired successfully!', 'success');
 		}
 
 	}
