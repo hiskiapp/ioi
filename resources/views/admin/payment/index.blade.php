@@ -41,7 +41,13 @@
 
                     <tr>
                         <td>Proof of Payment</td>
-                        <td><a data-lightbox='roadtrip' title='Proof Payment: {{ $transaction->code }}' href='{{ url($row->proof) }}'><img width='160px' height='160px' src='{{ $row->proof }}'/></a></td>
+                        <td>
+                            @if($row->proof)
+                            <a data-lightbox='roadtrip' title='Proof Payment: {{ $transaction->code }}' href='{{ url($row->proof) }}'><img width='160px' height='160px' src='{{ $row->proof }}'/></a>
+                            @else
+                            -
+                            @endif
+                        </td>
                     </tr>
 
 
