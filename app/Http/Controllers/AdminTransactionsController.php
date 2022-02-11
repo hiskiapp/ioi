@@ -170,6 +170,7 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 	        | 
 	        */
 	        $this->addaction = array();
+			$this->addaction[] = ['label'=>'Payment','url'=>CRUDBooster::mainpath('payment/[id]').'?return_url='.Request::url(),'icon'=>'fa fa-money','color'=>'danger','showIf'=>"in_array([status], ['Unpaid', 'Checking', 'Proccess','Shipping','Success'])"];
 			$this->addaction[] = ['label'=>'Shipping','url'=>CRUDBooster::mainpath('shipping/[id]').'?return_url='.Request::url(),'icon'=>'fa fa-road','color'=>'warning','showIf'=>"in_array([status], ['Proccess','Shipping','Success'])"];
 
 
@@ -419,7 +420,7 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 
 	    //By the way, you can still create your own method in here... :) 
 		public function getUnpaid($id) {
-			$update = DB::table('transactions')->where('id', $id)->update([
+			DB::table('transactions')->where('id', $id)->update([
 				'status' => 'Unpaid',
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
@@ -428,7 +429,7 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 		}
 
 		public function getChecking($id) {
-			$update = DB::table('transactions')->where('id', $id)->update([
+			DB::table('transactions')->where('id', $id)->update([
 				'status' => 'Checking',
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
@@ -437,12 +438,19 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 		}
 
 		public function getProccess($id) {
-			$update = DB::table('transactions')->where('id', $id)->update([
+			DB::table('transactions')->where('id', $id)->update([
 				'status' => 'Proccess',
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
 
 			CB::redirectBack('Set transaction to proccess successfully!', 'success');
+		}
+
+		public function getPayment($id) {
+			$data['row'] = optional(DB::table('payment_confirmations')->where('transactions_id', $id)->first());
+			$data['transaction'] = DB::table('transactions')->where('id', $id)->first();
+
+			return $this->view('admin.payment.index', $data);
 		}
 
 		public function getShipping($id) {
@@ -455,7 +463,7 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 		public function postShipping($id) {
 			$transactions = DB::table('transactions')->where('id', $id)->first();
 
-			$shipping = DB::table('shippings')->updateOrInsert([
+			DB::table('shippings')->updateOrInsert([
 				'transactions_id' => $id,
 			], [
 				'address_id' => $transactions->address_id,
@@ -466,7 +474,7 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
 
-			$update = DB::table('transactions')->where('id', $id)->update([
+			DB::table('transactions')->where('id', $id)->update([
 				'status' => 'Shipping',
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
@@ -475,7 +483,7 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 		}
 
 		public function getSuccess($id) {
-			$update = DB::table('transactions')->where('id', $id)->update([
+			DB::table('transactions')->where('id', $id)->update([
 				'status' => 'Success',
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
@@ -484,12 +492,40 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 		}
 
 		public function getExpired($id) {
-			$update = DB::table('transactions')->where('id', $id)->update([
+			DB::table('transactions')->where('id', $id)->update([
 				'status' => 'Expired',
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
 
 			CB::redirectBack('Set transaction to expired successfully!', 'success');
+		}
+
+		public function getApprove($id) {
+			DB::table('transactions')->where('id', $id)->update([
+				'status' => 'Proccess',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			DB::table('payment_confirmations')->where('transactions_id', $id)->update([
+				'status' => 'Approved',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			CB::redirectBack('Set transaction to proccess successfully!', 'success');
+		}
+
+		public function getReject($id) {
+			DB::table('transactions')->where('id', $id)->update([
+				'status' => 'Unpaid',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			DB::table('payment_confirmations')->where('transactions_id', $id)->update([
+				'status' => 'Rejected',
+				'updated_at' => date('Y-m-d H:i:s'),
+			]);
+
+			CB::redirectBack('Set transaction to unpaid successfully!', 'success');
 		}
 
 	}
