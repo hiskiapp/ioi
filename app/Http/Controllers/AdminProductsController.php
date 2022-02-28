@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use crocodicstudio\crudbooster\helpers\CRUDBooster;
 use Session;
@@ -7,10 +9,12 @@ use DB;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\Input;
 
-class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CBController {
-	
-	public function cbInit() {
-		
+class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CBController
+{
+
+	public function cbInit()
+	{
+
 		# START CONFIGURATION DO NOT REMOVE THIS LINE
 		$this->title_field = "name";
 		$this->limit = "20";
@@ -29,33 +33,33 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		$this->button_export = true;
 		$this->table = "products";
 		# END CONFIGURATION DO NOT REMOVE THIS LINE
-		
+
 		# START COLUMNS DO NOT REMOVE THIS LINE
 		$this->col = [];
-		$this->col[] = ["label"=>"Name","name"=>"name"];
-		$this->col[] = ["label"=>"Location","name"=>"location"];
-		$this->col[] = ["label"=>"Size","name"=>"size"];
-		$this->col[] = ["label"=>"Stock","name"=>"stock"];
-		$this->col[] = ["label"=>"Price","name"=>"price","callback_php"=>'number_format($row->price, 0, ",", ".")'];
-		$this->col[] = ["label"=>"Category","name"=>"categories_id","join"=>"categories,name"];
-		$this->col[] = ["label"=>"Sub Category","name"=>"sub_categories_id","join"=>"sub_categories,name"];
-		$this->col[] = ["label"=>"Seen Total","name"=>"seen_total"];
+		$this->col[] = ["label" => "Name", "name" => "name"];
+		$this->col[] = ["label" => "Location", "name" => "location"];
+		$this->col[] = ["label" => "Size", "name" => "size"];
+		$this->col[] = ["label" => "Stock", "name" => "stock"];
+		$this->col[] = ["label" => "Price", "name" => "price", "callback_php" => 'number_format($row->price, 0, ",", ".")'];
+		$this->col[] = ["label" => "Category", "name" => "categories_id", "join" => "categories,name"];
+		$this->col[] = ["label" => "Sub Category", "name" => "sub_categories_id", "join" => "sub_categories,name"];
+		$this->col[] = ["label" => "Seen Total", "name" => "seen_total"];
 		# END COLUMNS DO NOT REMOVE THIS LINE
-		
+
 		# START FORM DO NOT REMOVE THIS LINE
 		$this->form = [];
-		$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
-		// $this->form[] = ['label'=>'Images','name'=>'images','type'=>'text','validation'=>'required','width'=>'col-sm-9'];
-		$this->form[] = ['label'=>'Permalink','name'=>'permalink','type'=>'text','validation'=>'required|min:3|unique:products,permalink','width'=>'col-sm-10'];
-		$this->form[] = ['label'=>'Description','name'=>'description','type'=>'wysiwyg','validation'=>'required|string|min:5|max:5000','width'=>'col-sm-10'];
-		$this->form[] = ['label'=>'Category','name'=>'categories_id','type'=>'select','width'=>'col-sm-10','datatable'=>'categories,name'];
-		$this->form[] = ['label'=>'Sub Category','name'=>'sub_categories_id','type'=>'select','width'=>'col-sm-10','datatable'=>'sub_categories,name','parent_select'=>'categories_id'];
-		$this->form[] = ['label'=>'Location','name'=>'location','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-		$this->form[] = ['label'=>'Price','name'=>'price','type'=>'money','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
-		$this->form[] = ['label'=>'Size','name'=>'size','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
-		$this->form[] = ['label'=>'Stock','name'=>'stock','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
+		$this->form[] = ['label' => 'Name', 'name' => 'name', 'type' => 'text', 'validation' => 'required|string|min:3|max:70', 'width' => 'col-sm-10', 'placeholder' => 'You can only enter the letter only'];
+		$this->form[] = ['label' => 'Images', 'name' => 'images', 'type' => 'hidden', 'validation' => 'required', 'width' => 'col-sm-9'];
+		$this->form[] = ['label' => 'Permalink', 'name' => 'permalink', 'type' => 'text', 'validation' => 'required|min:3|unique:products,permalink', 'width' => 'col-sm-10'];
+		$this->form[] = ['label' => 'Description', 'name' => 'description', 'type' => 'wysiwyg', 'validation' => 'required|string|min:5|max:5000', 'width' => 'col-sm-10'];
+		$this->form[] = ['label' => 'Category', 'name' => 'categories_id', 'type' => 'select', 'width' => 'col-sm-10', 'datatable' => 'categories,name', 'validation' => 'required|integer|min:0'];
+		$this->form[] = ['label' => 'Sub Category', 'name' => 'sub_categories_id', 'type' => 'select', 'width' => 'col-sm-10', 'datatable' => 'sub_categories,name', 'parent_select' => 'categories_id', 'validation' => 'required|integer|min:0'];
+		$this->form[] = ['label' => 'Location', 'name' => 'location', 'type' => 'text', 'validation' => 'required|min:1|max:255', 'width' => 'col-sm-10'];
+		$this->form[] = ['label' => 'Price', 'name' => 'price', 'type' => 'money', 'validation' => 'required|integer|min:0', 'width' => 'col-sm-10'];
+		$this->form[] = ['label' => 'Size', 'name' => 'size', 'type' => 'text', 'validation' => 'required|min:1|max:255', 'width' => 'col-sm-10'];
+		$this->form[] = ['label' => 'Stock', 'name' => 'stock', 'type' => 'number', 'validation' => 'required|integer|min:0', 'width' => 'col-sm-10'];
 		# END FORM DO NOT REMOVE THIS LINE
-		
+
 		# OLD START FORM
 		//$this->form = [];
 		//$this->form[] = ['label'=>'Name','name'=>'name','type'=>'text','validation'=>'required|string|min:3|max:70','width'=>'col-sm-10','placeholder'=>'You can only enter the letter only'];
@@ -69,7 +73,7 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		//$this->form[] = ['label'=>'Size','name'=>'size','type'=>'text','validation'=>'required|min:1|max:255','width'=>'col-sm-10'];
 		//$this->form[] = ['label'=>'Stock','name'=>'stock','type'=>'number','validation'=>'required|integer|min:0','width'=>'col-sm-10'];
 		# OLD END FORM
-		
+
 		/* 
 		| ---------------------------------------------------------------------- 
 		| Sub Module
@@ -83,8 +87,8 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		| 
 		*/
 		$this->sub_module = array();
-		
-		
+
+
 		/* 
 		| ---------------------------------------------------------------------- 
 		| Add More Action Button / Menu
@@ -97,8 +101,8 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		| 
 		*/
 		$this->addaction = array();
-		
-		
+
+
 		/* 
 		| ---------------------------------------------------------------------- 
 		| Add More Button Selected
@@ -110,8 +114,8 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		| 
 		*/
 		$this->button_selected = array();
-		
-		
+
+
 		/* 
 		| ---------------------------------------------------------------------- 
 		| Add alert message to this module at overheader
@@ -121,9 +125,9 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		| 
 		*/
 		$this->alert        = array();
-		
-		
-		
+
+
+
 		/* 
 		| ---------------------------------------------------------------------- 
 		| Add more button to header button 
@@ -134,9 +138,9 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		| 
 		*/
 		$this->index_button = array();
-		
-		
-		
+
+
+
 		/* 
 		| ---------------------------------------------------------------------- 
 		| Customize Table Row Color
@@ -145,9 +149,9 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		| @color = Default is none. You can use bootstrap success,info,warning,danger,primary.        
 		| 
 		*/
-		$this->table_row_color = array();     	          
-		
-		
+		$this->table_row_color = array();
+
+
 		/*
 		| ---------------------------------------------------------------------- 
 		| You may use this bellow array to add statistic at dashboard 
@@ -156,9 +160,9 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		|
 		*/
 		$this->index_statistic = array();
-		
-		
-		
+
+
+
 		/*
 		| ---------------------------------------------------------------------- 
 		| Add javascript at body 
@@ -168,8 +172,8 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		|
 		*/
 		$this->script_js = NULL;
-		
-		
+
+
 		/*
 		| ---------------------------------------------------------------------- 
 		| Include HTML Code before index table 
@@ -179,9 +183,9 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		|
 		*/
 		$this->pre_index_html = null;
-		
-		
-		
+
+
+
 		/*
 		| ---------------------------------------------------------------------- 
 		| Include HTML Code after index table 
@@ -191,9 +195,9 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		|
 		*/
 		$this->post_index_html = null;
-		
-		
-		
+
+
+
 		/*
 		| ---------------------------------------------------------------------- 
 		| Include Javascript File 
@@ -203,9 +207,9 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		|
 		*/
 		$this->load_js = array();
-		
-		
-		
+
+
+
 		/*
 		| ---------------------------------------------------------------------- 
 		| Add css style at body 
@@ -215,9 +219,9 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		|
 		*/
 		$this->style_css = NULL;
-		
-		
-		
+
+
+
 		/*
 		| ---------------------------------------------------------------------- 
 		| Include css File 
@@ -227,11 +231,9 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 		|
 		*/
 		$this->load_css = array();
-		
-		
 	}
-	
-	
+
+
 	/*
 	| ---------------------------------------------------------------------- 
 	| Hook for button selected
@@ -240,12 +242,13 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 	| @button_name = the name of button
 	|
 	*/
-	public function actionButtonSelected($id_selected,$button_name) {
+	public function actionButtonSelected($id_selected, $button_name)
+	{
 		//Your code here
-		
+
 	}
-	
-	
+
+
 	/*
 	| ---------------------------------------------------------------------- 
 	| Hook for manipulate query of index result 
@@ -253,21 +256,23 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 	| @query = current sql query 
 	|
 	*/
-	public function hook_query_index(&$query) {
+	public function hook_query_index(&$query)
+	{
 		//Your code here
-		
+
 	}
-	
+
 	/*
 	| ---------------------------------------------------------------------- 
 	| Hook for manipulate row of index table html 
 	| ---------------------------------------------------------------------- 
 	|
-	*/    
-	public function hook_row_index($column_index,&$column_value) {	        
+	*/
+	public function hook_row_index($column_index, &$column_value)
+	{
 		//Your code here
 	}
-	
+
 	/*
 	| ---------------------------------------------------------------------- 
 	| Hook for manipulate data input before add data is execute
@@ -275,18 +280,18 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 	| @arr
 	|
 	*/
-	public function hook_before_add(&$postdata) {
-		if(is_array($postdata['images'])) {
-			$postdata['images'] = self::uploadMultipleImages($postdata);
-		}else{
+	public function hook_before_add(&$postdata)
+	{
+		if (!is_array(g('images'))) {
 			$resp = redirect()->back()->with(['message' => 'Image required!', 'message_type' => 'warning'])->withInput();
 			Session::driver()->save();
-            $resp->send();
-            exit;
+			$resp->send();
+			exit;
 		}
+
 		$postdata['permalink'] = str_slug($postdata['permalink']);
 	}
-	
+
 	/* 
 	| ---------------------------------------------------------------------- 
 	| Hook for execute command after add public static function called 
@@ -294,11 +299,26 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 	| @id = last insert id
 	| 
 	*/
-	public function hook_after_add($id) {        
-		//Your code here
-		
+	public function hook_after_add($id)
+	{
+		$images = g('images');
+
+		if (is_array($images)) {
+			$images = collect($images)->map(function ($image) {
+				return str_replace(url('/') . '/', '', $image);
+			})->toArray();
+			$data = [];
+			foreach ($images as $image) {
+				$data[] = [
+					'products_id' => $id,
+					'src' => $image
+				];
+			}
+
+			DB::table('product_images')->insert($data);
+		}
 	}
-	
+
 	/* 
 	| ---------------------------------------------------------------------- 
 	| Hook for manipulate data input before update data is execute
@@ -307,13 +327,18 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 	| @id       = current id 
 	| 
 	*/
-	public function hook_before_edit(&$postdata,$id) {
-		if(is_array($postdata['images'])) {
-			$postdata['images'] = self::uploadMultipleImages($postdata);
+	public function hook_before_edit(&$postdata, $id)
+	{
+		if (!is_array(g('images'))) {
+			$resp = redirect()->back()->with(['message' => 'Image required!', 'message_type' => 'warning'])->withInput();
+			Session::driver()->save();
+			$resp->send();
+			exit;
 		}
+
 		$postdata['permalink'] = str_slug($postdata['permalink']);
 	}
-	
+
 	/* 
 	| ---------------------------------------------------------------------- 
 	| Hook for execute command after edit public static function called
@@ -321,11 +346,28 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 	| @id       = current id 
 	| 
 	*/
-	public function hook_after_edit($id) {
-		//Your code here 
-		
+	public function hook_after_edit($id)
+	{
+		DB::table('product_images')->where('products_id', $id)->delete();
+
+		$images = g('images');
+
+		if (is_array($images)) {
+			$images = collect($images)->map(function ($image) {
+				return str_replace(url('/') . '/', '', $image);
+			})->toArray();
+			$data = [];
+			foreach ($images as $image) {
+				$data[] = [
+					'products_id' => $id,
+					'src' => $image
+				];
+			}
+
+			DB::table('product_images')->insert($data);
+		}
 	}
-	
+
 	/* 
 	| ---------------------------------------------------------------------- 
 	| Hook for execute command before delete public static function called
@@ -333,11 +375,12 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 	| @id       = current id 
 	| 
 	*/
-	public function hook_before_delete($id) {
+	public function hook_before_delete($id)
+	{
 		//Your code here
-		
+
 	}
-	
+
 	/* 
 	| ---------------------------------------------------------------------- 
 	| Hook for execute command after delete public static function called
@@ -345,70 +388,51 @@ class AdminProductsController extends \crocodicstudio\crudbooster\controllers\CB
 	| @id       = current id 
 	| 
 	*/
-	public function hook_after_delete($id) {
+	public function hook_after_delete($id)
+	{
 		//Your code here
-		
+
 	}
-	
-	
-	
+
+
+
 	//By the way, you can still create your own method in here... :) 
-	public function getAdd() {
+	public function getAdd()
+	{
 		//Create an Auth
-		if(!CRUDBooster::isCreate() && $this->global_privilege==FALSE || $this->button_add==FALSE) {    
-			CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+		if (!CRUDBooster::isCreate() && $this->global_privilege == FALSE || $this->button_add == FALSE) {
+			CRUDBooster::redirect(CRUDBooster::adminPath(), trans("crudbooster.denied_access"));
 		}
-		
+
 		$data = [];
 		$data['page_title'] = 'Add Data';
 		$data['categories'] = DB::table('categories')->get();
-		
+
 		//Please use view method instead view method from laravel
-		return $this->view('admin.products.form',$data);
+		return $this->view('admin.products.form', $data);
 	}
 
-	public function getEdit($id) {
+	public function getEdit($id)
+	{
 		//Create an Auth
-		if(!CRUDBooster::isUpdate() && $this->global_privilege==FALSE || $this->button_edit==FALSE) {    
-		  CRUDBooster::redirect(CRUDBooster::adminPath(),trans("crudbooster.denied_access"));
+		if (!CRUDBooster::isUpdate() && $this->global_privilege == FALSE || $this->button_edit == FALSE) {
+			CRUDBooster::redirect(CRUDBooster::adminPath(), trans("crudbooster.denied_access"));
 		}
-		
+
 		$data = [];
 		$data['page_title'] = 'Edit Data';
 		$data['categories'] = DB::table('categories')->get();
 
-		$row = DB::table('products')->where('id',$id)->first();
-		$row->images = collect(json_decode($row->images))->map(function($image) {
-			$image->src = url($image->src);
-			return $image;
-		})->toJson();
+		$row = DB::table('products')->where('id', $id)->first();
+		$row->product_images = DB::table('product_images')->where('products_id', $row->id)->pluck('src')->toArray();
 		$data['row'] = $row;
-		
+
 		//Please use view method instead view method from laravel
-		return $this->view('admin.products.form',$data);
+		return $this->view('admin.products.form', $data);
 	}
 
-	private function uploadMultipleImages($postdata) {
-		$userID = CRUDBooster::myId() ?: 0;
-		$images = $postdata['images'];
-		$data = [];
-		foreach ($images as $i => $image) {
-			$file = $image;
-            $ext = $file->getClientOriginalExtension();
-            $filename = str_slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
-            $file_path = 'uploads/'.$userID.'/'.date('Y-m');
-            Storage::makeDirectory($file_path);
-            $filename = str_slug($filename, '_').'.'.$ext;
-            if (Storage::putFileAs($file_path, $file, $filename)) {
-				$data[] = [
-					'id' => $i + 1,
-					'src' => $file_path.'/'.$filename
-				];
-            }
-		}
-
-		return json_encode($data);
-	} 
-
-	
+	public function postDropzone()
+	{
+		return response()->json(['name' => CRUDBooster::uploadFile('file', true)]);
+	}
 }

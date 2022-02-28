@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('admin', function () {
+    return redirect('admin/statistic_builder/dashboard');
 });
 
-Route::get('admin', function() {
-    return redirect('admin/statistic_builder/dashboard');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
+
+Auth::routes();
+
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/account', [App\Http\Controllers\AccountController::class, 'index'])->name('account.index');
+    Route::post('/account', [App\Http\Controllers\AccountController::class, 'update'])->name('account.update');
 });
