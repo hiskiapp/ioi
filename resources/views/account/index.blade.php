@@ -1,6 +1,7 @@
-@extends('layouts.auth')
+@extends('layouts.app')
 @section('title', 'My Account')
 @section('content')
+    @include('layouts.partials.breadcumb', ['bg' => get_setting('breadcumb_my_account')])
     <div class="register-area ptb-100">
         <div class="container-fluid">
             <div class="row">

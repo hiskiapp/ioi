@@ -23,7 +23,13 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 Auth::routes();
 
 Route::group(['middleware' => 'auth'], function () {
-
+    // My Account
     Route::get('/account', [App\Http\Controllers\AccountController::class, 'index'])->name('account.index');
     Route::post('/account', [App\Http\Controllers\AccountController::class, 'update'])->name('account.update');
+
+    // Cart
+    ROute::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart/add/{products_id}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
+    Route::post('/cart/qty', [App\Http\Controllers\CartController::class, 'qty'])->name('cart.qty');
+    Route::delete('/cart/{id}', [App\Http\Controllers\CartController::class, 'destroy'])->name('cart.destroy');
 });

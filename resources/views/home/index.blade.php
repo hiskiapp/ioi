@@ -39,10 +39,18 @@
                                     <img src="{{ asset($product->image) }}" alt="">
                                 </a>
                                 <div class="product-action">
-                                    <a class="animate-top" title="Add To Cart" href="#">
+                                    <a class="animate-top" title="Add To Cart" href="javascript:void(0);"
+                                        onclick="event.preventDefault();document.getElementById('popular_product_{{ $product->id }}').submit();">
                                         <i class="pe-7s-cart"></i>
                                     </a>
-                                    <a class="animate-right" title="View Product" href="#">
+                                    <form id="popular_product_{{ $product->id }}"
+                                        action="{{ route('cart.add', $product->id) }}" method="POST"
+                                        class="d-none">
+                                        @csrf
+
+                                    </form>
+                                    <a class="animate-right" title="View Product"
+                                        href="{{ url("products/$product->permalink") }}">
                                         <i class="pe-7s-look"></i>
                                     </a>
                                 </div>
@@ -85,9 +93,16 @@
                                                 <img src="{{ asset($product->image) }}" alt="">
                                             </a>
                                             <div class="product-action">
-                                                <a class="animate-top" title="Add To Cart" href="#">
+                                                <a class="animate-top" title="Add To Cart" href="javascript:void(0);"
+                                                    onclick="event.preventDefault();document.getElementById('product_{{ $product->id }}').submit();">
                                                     <i class="pe-7s-cart"></i>
                                                 </a>
+                                                <form id="product_{{ $product->id }}"
+                                                    action="{{ route('cart.add', $product->id) }}" method="POST"
+                                                    class="d-none">
+                                                    @csrf
+
+                                                </form>
                                                 <a class="animate-right" title="View Product"
                                                     href="{{ url("products/$product->permalink") }}">
                                                     <i class="pe-7s-look"></i>
@@ -95,7 +110,9 @@
                                             </div>
                                         </div>
                                         <div class="funiture-product-content text-center">
-                                            <h4><a href="product-details.html">{{ $product->name }}</a></h4>
+                                            <h4><a
+                                                    href="{{ url("products/$product->permalink") }}">{{ $product->name }}</a>
+                                            </h4>
                                             <span>${{ number_format($product->price) }}</span>
                                             {{-- <div class="product-rating-5">
                                                 <i class="pe-7s-star black"></i>

@@ -42,12 +42,14 @@
                                     </div>
                                     <div class="cart-delete">
                                         <a href="javascript:void(0);" onclick="event.preventDefault();
-                                    document.getElementById('destroy_cart{{ $item->id }}').submit();"><i
+                                    document.getElementById('destroy_cart_{{ $item->id }}').submit();"><i
                                                 class="ti-trash"></i></a>
-                                        <form id="destroy_cart{{ $item->id }}"
-                                            action="{{ url('cart/destroy') }}" method="POST" class="d-none">
+                                        <form id="destroy_cart_{{ $item->id }}"
+                                            action="{{ url("cart/$item->id") }}" method="POST"
+                                            class="d-none">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $item->id }}">
+                                            @method('DELETE')
+
                                         </form>
                                     </div>
                                 </li>

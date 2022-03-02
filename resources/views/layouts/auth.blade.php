@@ -35,7 +35,7 @@
     <!-- header start -->
     @include('layouts.partials.header')
     <!-- header end -->
-    @include('layouts.partials.breadcumb')
+    @include('layouts.partials.breadcumb', ['bg' => get_setting('breadcumb_auth')])
     <!-- login-area start -->
     @yield('content')
     <!-- login-area end -->
