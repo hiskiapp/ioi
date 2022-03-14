@@ -30,7 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Products
     Route::get('/products', [App\Http\Controllers\ProductController::class, 'index'])->name('products.index');
     Route::get('/products/{slug}', [App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
-    
+
     // Cart
     ROute::get('/cart', [App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
     Route::post('/cart/add/{products_id}', [App\Http\Controllers\CartController::class, 'add'])->name('cart.add');
@@ -53,6 +53,7 @@ Route::group(['middleware' => 'auth'], function () {
     // Payment
     Route::get('/orders/{code}/payment', [App\Http\Controllers\PaymentController::class, 'index'])->name('payment.index');
     Route::post('/orders/{code}/payment', [App\Http\Controllers\PaymentController::class, 'store'])->name('payment.store');
-    
 
+    // Address
+    Route::get('/address/{id}', [App\Http\Controllers\AddressController::class, 'show'])->name('address.show');
 });

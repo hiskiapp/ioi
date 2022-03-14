@@ -5,8 +5,19 @@
     <!-- checkout-area start -->
     <div class="checkout-area ptb-100">
         <div class="container">
-            <form method="POST">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form method="POST" action="{{ route('checkout.store') }}">
                 @csrf
+
+                <input type="hidden" name="payment_methods_id" value="{{ optional($payments->first())->id }}">
                 <div class="row">
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="checkbox-form">
@@ -15,10 +26,10 @@
                                 <div class="col-md-12">
                                     <div class="country-select">
                                         <label>Addresses <span class="required">*</span></label>
-                                        <select>
+                                        <select name="address_id">
                                             @foreach ($addresses as $address)
                                                 <option value="{{ $address->id }}">
-                                                    {{ str_limit($address->main_address, 20) }}</option>
+                                                    {{ \Str::limit($address->main_address, 20) }}</option>
                                             @endforeach
                                             <option value="">** New Address</option>
                                         </select>
@@ -28,49 +39,51 @@
                                     <div class="checkout-form-list">
                                         <label>Receive Name <span class="required">*</span></label>
                                         <input type="text" name="receive_name" placeholder=""
-                                            value="{{ auth()->user()->name }}" required />
+                                            value="{{ old('receive_name', auth()->user()->name) }}" required />
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
                                         <label>Main Address <span class="required">*</span></label>
-                                        <input type="text" name="main_address" placeholder="Street address" required />
+                                        <input type="text" name="main_address" placeholder="Street address"
+                                            value="{{ old('main_address') }}" required />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="checkout-form-list">
                                         <label>Province <span class="required">*</span></label>
-                                        <input type="text" name="province" required />
+                                        <input type="text" name="province" value="{{ old('province') }}" required />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="checkout-form-list">
                                         <label>Town / City <span class="required">*</span></label>
-                                        <input type="text" name="city" required />
+                                        <input type="text" name="city" value="{{ old('city') }}" required />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="checkout-form-list">
                                         <label>District <span class="required">*</span></label>
-                                        <input type="text" name="district" placeholder="" required />
+                                        <input type="text" name="district" value="{{ old('district') }}" placeholder=""
+                                            required />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="checkout-form-list">
                                         <label>Phone <span class="required">*</span></label>
-                                        <input type="text" name="phone" required />
+                                        <input type="text" name="phone" value="{{ old('phone') }}" required />
                                     </div>
                                 </div>
                                 <div class="col-md-6 order-notes">
                                     <div class="checkout-form-list mrg-nn">
                                         <label>Detail</label>
-                                        <textarea name="detail" id="detail" rows="3"></textarea>
+                                        <textarea name="detail" id="detail" rows="3">{{ old('detail') }}</textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-6 order-notes">
                                     <div class="checkout-form-list mrg-nn">
                                         <label>Note</label>
-                                        <textarea name="note" id="note" rows="3"></textarea>
+                                        <textarea name="note" id="note" rows="3">{{ old('note') }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -128,9 +141,12 @@
                                         @foreach ($payments as $payment)
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
-                                                    <h5 class="panel-title"> <a data-bs-toggle="collapse"
-                                                            aria-expanded="true" href="#payment-{{ $loop->iteration }}">
-                                                            {{ $payment->name }}.</a></h5>
+                                                    <h5 class="panel-title payment-selector"
+                                                        data-id="{{ $payment->id }}">
+                                                        <a data-bs-toggle="collapse"
+                                                            href="#payment-{{ $loop->iteration }}">
+                                                            {{ $payment->name }}.</a>
+                                                    </h5>
                                                 </div>
                                                 <div id="payment-{{ $loop->iteration }}"
                                                     class="panel-collapse collapse show" data-bs-parent="#faq">
@@ -156,4 +172,44 @@
         </div>
     </div>
     <!-- checkout-area end -->
+    @push('js')
+        <script>
+            $(function() {
+                $('select[name="address_id"]').change(function() {
+                    let id = $(this).val();
+                    if (id) {
+                        $.ajax({
+                            url: "{{ url('address') }}/" + id,
+                            dataType: "json",
+                            success: function(data) {
+                                $("input[name='receive_name']").val(data.data.receive_name);
+                                $("input[name='main_address']").val(data.data.main_address);
+                                $("input[name='province']").val(data.data.province);
+                                $("input[name='city']").val(data.data.city);
+                                $("input[name='district']").val(data.data.district);
+                                $("input[name='phone']").val(data.data.phone);
+                                $("textarea[name='detail']").val(data.data.detail);
+                                $("textarea[name='note']").val(data.data.note);
+                            }
+                        });
+                    } else {
+                        $("input[name='receive_name']").val("");
+                        $("input[name='main_address']").val("");
+                        $("input[name='province']").val("");
+                        $("input[name='city']").val("");
+                        $("input[name='district']").val("");
+                        $("input[name='phone']").val("");
+                        $("textarea[name='detail']").val("");
+                        $("textarea[name='note']").val("");
+                    }
+                });
+
+                $('.payment-selector').on('click', function() {
+                    $('input[name="payment_methods_id"]').val($(this).data('id'));
+                });
+
+                $('select[name="address_id"]').trigger('change');
+            });
+        </script>
+    @endpush
 @endsection

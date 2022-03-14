@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use App\Repositories\Carts;
@@ -18,7 +19,7 @@ class TransactionsService extends Transactions
     }
 
     public static function checkout($users_id)
-    {   
+    {
         $code = static::generateCode();
         $total_price = Carts::getTotalPriceByUsersId($users_id);
         $total_item = Carts::getTotalItemByUsersId($users_id);
@@ -29,7 +30,9 @@ class TransactionsService extends Transactions
             'address_id' => g('address_id', AddressService::newByRequest($users_id)),
             'code' => $code,
             'total_price' => $total_price,
-            'total_item' => $total_item
+            'total_item' => $total_item,
+            'status' => 'Unpaid',
+            'created_at' => now(),
         ]);
 
         $transactions_id = DB::getPdo()->lastInsertId();

@@ -23,7 +23,7 @@ class CartController extends Controller
 
         CartsService::addProduct(auth()->id(), $product->id);
 
-        return redirect()->route('cart.index')->with(['success' => 'Item added!']);;
+        return redirect()->route('cart.index')->with(['success' => 'Item added!']);
     }
 
     public function qty(Request $request)

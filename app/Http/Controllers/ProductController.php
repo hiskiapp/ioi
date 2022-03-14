@@ -9,16 +9,16 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index(){
-        abort(503, 'Under Development');
-        
+    public function index()
+    {
         $search = g('q');
         $categories_id = g('categories_id');
         $sort = g('sort', 'asc');
 
-        $data['popular_products'] = Products::findAllByPopularity(4); 
+        $data['popular_products'] = Products::findAllByPopularity(4);
+        $data['count_products'] = Products::countAll();
         $data['products'] = Products::search(12, $search, $categories_id, $sort);
-        $data['categories'] = Categories::findAllWithTotalProducts();
+        $data['categories'] = Categories::findAllWithTotalProducts($search, false);
 
         return view('products.index', $data);
     }
@@ -29,7 +29,7 @@ class ProductController extends Controller
         $data['related_products'] = Products::findRelatedProduct($data['product']->id);
 
         ProductsService::addSeenTotal($data['product']->id);
-        
+
         return view('products.show', $data);
     }
 }

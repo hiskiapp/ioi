@@ -15,8 +15,9 @@ class CheckoutController extends Controller
 {
     public function index()
     {
-        abort(503, 'Under Development');
-        
+        $items = Carts::getTotalItemByUsersId(auth()->id());
+        if (!$items) return redirect()->route('cart.index')->with(['success' => 'Cart empty!']);
+
         $data['items'] = Carts::findAllByUsersId(auth()->id());
         $data['addresses'] = Address::findAllBy('users_id', auth()->id());
         $data['payments'] = PaymentMethods::findAll();
@@ -26,8 +27,11 @@ class CheckoutController extends Controller
 
     public function store(CheckoutRequest $request)
     {
+        $items = Carts::getTotalItemByUsersId(auth()->id());
+        if (!$items) return redirect()->route('cart.index')->with(['success' => 'Cart empty!']);
+
         TransactionsService::checkout(auth()->id());
-        
-        return redirect()->route('order.index')->with('status', 'Your order has been placed!');
+
+        return redirect()->route('orders.index')->with('status', 'Your order has been placed!');
     }
 }
