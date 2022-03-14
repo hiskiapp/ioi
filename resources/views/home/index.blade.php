@@ -57,7 +57,7 @@
                             </div>
                             <div class="funiture-product-content text-center">
                                 <h4><a href="#">{{ $product->name }}</a></h4>
-                                <span>${{ number_format($product->price) }}</span>
+                                <span>{{ format_currency($product->price) }}</span>
                             </div>
                         </div>
                     @endforeach
@@ -113,7 +113,7 @@
                                             <h4><a
                                                     href="{{ url("products/$product->permalink") }}">{{ $product->name }}</a>
                                             </h4>
-                                            <span>${{ number_format($product->price) }}</span>
+                                            <span>{{ format_currency($product->price) }}</span>
                                             {{-- <div class="product-rating-5">
                                                 <i class="pe-7s-star black"></i>
                                                 <i class="pe-7s-star black"></i>

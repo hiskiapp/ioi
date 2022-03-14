@@ -55,4 +55,9 @@ class CartsService extends Carts
 
         return $total;
     }
+
+    public static function clear($users_id)
+    {
+        DB::table('carts')->where('users_id', $users_id)->delete();
+    }
 }

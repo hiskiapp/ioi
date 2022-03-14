@@ -37,7 +37,7 @@
                                     </div>
                                     <div class="cart-title">
                                         <h5><a href="#"> {{ $item->products_name }}</a></h5>
-                                        <span>${{ number_format($item->products_price) }} x
+                                        <span>{{ format_currency($item->products_price) }} x
                                             {{ $item->total_order }}</span>
                                     </div>
                                     <div class="cart-delete">
@@ -59,7 +59,7 @@
                                     <h4>Subtotal</h4>
                                 </div>
                                 <div class="cart-price">
-                                    <h4>${{ number_format($subtotal) }}</h4>
+                                    <h4>{{ format_currency($subtotal) }}</h4>
                                 </div>
                             </li>
                             <li class="cart-btn-wrapper">

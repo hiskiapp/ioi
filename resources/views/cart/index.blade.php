@@ -51,7 +51,7 @@
                                                 href="{{ url("products/$item->products_permalink") }}">{{ $item->products_name }}
                                             </a></td>
                                         <td class="product-price-cart"><span
-                                                class="amount">${{ number_format($item->products_price) }}</span>
+                                                class="amount">{{ format_currency($item->products_price) }}</span>
                                         </td>
                                         <td class="product-quantity">
                                             <input value="{{ $item->total_order }}" type="number" min="1"
@@ -62,7 +62,7 @@
                                             $total += $subtotal;
                                         @endphp
                                         <td class="product-subtotal" id="item{{ $item->id }}-subtotal">
-                                            ${{ number_format($subtotal) }}</td>
+                                            {{ format_currency($subtotal) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -73,7 +73,7 @@
                             <div class="cart-page-total">
                                 <h2>Cart totals</h2>
                                 <ul>
-                                    <li>Total<span id="cart-totals">{{ number_format($total) }}</span></li>
+                                    <li>Total<span id="cart-totals">{{ format_currency($total) }}</span></li>
                                 </ul>
                                 <a href="{{ url('checkout') }}">Proceed to checkout</a>
                             </div>

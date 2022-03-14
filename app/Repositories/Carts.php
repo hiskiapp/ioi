@@ -13,6 +13,7 @@ class Carts extends CartsModel
             ->join('products', 'carts.products_id', '=', 'products.id')
             ->select('carts.*', 'products.id as products_id', 'products.name as products_name', 'products.price as products_price', 'products.permalink as products_permalink')
             ->where('users_id', $users_id)
+            ->where('total_order', '>=', 1)
             ->get();
 
         $images = DB::table('product_images')
@@ -24,5 +25,24 @@ class Carts extends CartsModel
 
             return $row;
         });
+    }
+
+    public static function getTotalPriceByUsersId(int $users_id)
+    {
+        $items = static::findAllByUsersId($users_id);
+
+        $total = 0;
+        foreach ($items as $item) {
+            $total += $item->total_order * $item->products_price;
+        }
+
+        return $total;
+    }
+
+    public static function getTotalItemByUsersId(int $users_id)
+    {
+        $items = static::findAllByUsersId($users_id);
+
+        return $items->sum('total_order');
     }
 }

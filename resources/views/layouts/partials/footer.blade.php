@@ -11,7 +11,7 @@
                                 <li><a href="{{ url('account') }}">My Account</a></li>
                                 <li><a href="{{ url('login') }}">Login</a></li>
                                 <li><a href="{{ url('register') }}">Register</a></li>
-                                <li><a href="{{ url('order') }}">My Orders</a></li>
+                                <li><a href="{{ url('orders') }}">My Orders</a></li>
                             </ul>
                         </div>
                     </div>
