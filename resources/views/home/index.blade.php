@@ -135,6 +135,7 @@
         </div>
     </div>
     <!-- product area end -->
+    @if(get_setting('show_testimonial') == 'Yes')
     <!-- testimonials area start -->
     <div class="testimonials-area pt-120 pb-115">
         <div class="container">
@@ -149,6 +150,8 @@
         </div>
     </div>
     <!-- testimonials area end -->
+    @endif
+    @if(get_setting('show_feature_footer') == 'Yes')
     <!-- services area start -->
     <div class="services-area wrapper-padding-4 gray-bg pt-120 pb-80">
         <div class="container-fluid">
@@ -184,4 +187,5 @@
         </div>
     </div>
     <!-- services area end -->
+    @endif
 @endsection
