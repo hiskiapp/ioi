@@ -49,6 +49,30 @@ if (!function_exists('format_currency')) {
     function format_currency($number, $decimals = 0)
     {
         $symbol = get_setting('format_currency', 'Rp');
-        return $symbol.number_format($number, $decimals);
+        return $symbol . number_format($number, $decimals);
+    }
+}
+
+if (!function_exists('class_status')) {
+
+    /**
+     * class_status data
+     *
+     * @param
+     * @return
+     */
+    function class_status($status)
+    {
+        $status = ucwords($status);
+        $data = [
+            "Unpaid" => "danger",
+            "Checking" => "info",
+            "Process" => "primary",
+            "Shipping" => "warning",
+            "Success" => "success",
+            "Expired" => "secondary"
+        ];
+
+        return isset($data[$status]) ? $data[$status] : 'secondary';
     }
 }

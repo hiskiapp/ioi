@@ -64,10 +64,11 @@
                         <p>{!! $product->description !!}</p>
                         <div class="quickview-plus-minus">
                             <div style="width: 80px">
-                                <input value="1" type="number" name="qty_input" min="1" class="items-total" required>
+                                <input value="1" type="number" name="qty_input" min="1" max="{{ $product->stock }}"
+                                    class="items-total" required>
                             </div>
                             <div class="quickview-btn-cart">
-                                <a class="btn-hover-black" href="javascript:void(0);"
+                                <a @disabled(true) class="btn-hover-black" href="javascript:void(0);"
                                     onclick="event.preventDefault();document.getElementById('product_add').submit();">add
                                     to cart</a>
                                 <form id="product_add" action="{{ route('cart.add', $product->id) }}" method="POST"
@@ -78,6 +79,18 @@
                             </div>
                         </div>
                         <div class="product-details-cati-tag mt-35">
+                            <ul>
+                                <li class="categories-title">Size :</li>
+                                <li>{{ $product->size }}</li>
+                            </ul>
+                        </div>
+                        <div class="product-details-cati-tag mtb-10">
+                            <ul>
+                                <li class="categories-title">Stock :</li>
+                                <li>{{ $product->stock }}</li>
+                            </ul>
+                        </div>
+                        <div class="product-details-cati-tag mtb-10">
                             <ul>
                                 <li class="categories-title">Categories :</li>
                                 <li><a
@@ -164,8 +177,19 @@
     @push('js')
         <script>
             $(function() {
-                $('input[name="qty_input"]').on('keyup input', function() {
-                    $('input[name="qty"]').val($(this).val());
+                $('input[name="qty_input"]').on('keyup input', function(e) {
+                    var max = parseInt($(this).attr('max'));
+                    var min = parseInt($(this).attr('min'));
+                    var this_val = $(this).val();
+                    if ($(this).val() > max) {
+                        $(this).val(max);
+                        this_val = max;
+                    } else if ($(this).val() < min) {
+                        $(this).val(min);
+                        this_val = min;
+                    }
+
+                    $('input[name="qty"]').val(this_val);
                 });
             });
         </script>

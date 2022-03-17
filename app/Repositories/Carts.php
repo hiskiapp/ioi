@@ -11,7 +11,7 @@ class Carts extends CartsModel
     {
         $carts = DB::table('carts')
             ->join('products', 'carts.products_id', '=', 'products.id')
-            ->select('carts.*', 'products.id as products_id', 'products.name as products_name', 'products.price as products_price', 'products.permalink as products_permalink')
+            ->select('carts.*', 'products.id as products_id', 'products.name as products_name', 'products.price as products_price', 'products.permalink as products_permalink', 'products.stock as products_stock')
             ->where('users_id', $users_id)
             ->where('total_order', '>=', 1)
             ->get();

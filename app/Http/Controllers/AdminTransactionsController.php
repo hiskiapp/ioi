@@ -38,16 +38,9 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 			$this->col[] = ["label"=>"Total Price","name"=>"total_price","callback_php"=>'number_format($row->total_price, 0, ",", ".")'];
 			$this->col[] = ["label"=>"Total Item","name"=>"total_item"];
 			$this->col[] = ["label"=>"Status","name"=>"status","callback"=>function($row){
-				$class = [
-					'Unpaid' => 'warning',
-					'Checking' => 'info',
-					'Proccess' => 'primary',
-					'Shipping' => 'danger',
-					'Success' => 'success',
-					'Expired' => 'secondary',
-				];
+				$class_status = class_status($row->status);
 				$res = "<div class='dropdown'>
-				<button type='button' class='btn btn-{$class[$row->status]} btn-xs btn-document dropdown-toggle' data-toggle='dropdown'>
+				<button type='button' class='btn btn-{$class_status} btn-xs btn-document dropdown-toggle' data-toggle='dropdown'>
 				<span class='fa fa-list'></span> {$row->status} <span class='fa fa-caret-down'></span>
 				</button>
 				<ul class='dropdown-menu'>
@@ -85,7 +78,7 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 					confirmButtonText: &quot;Ya!&quot;,
 					cancelButtonText: &quot;Tidak&quot;,
 					closeOnConfirm: false },
-					function(){  location.href=&quot;" .CRUDBooster::mainPath('proccess/').$row->id."&quot; });'>Proccess</a>
+					function(){  location.href=&quot;" .CRUDBooster::mainPath('process/').$row->id."&quot; });'>Process</a>
 					</li>
 					<li>
 					<a href='".CRUDBooster::mainPath('shipping/').$row->id."'>Shipping</a>
@@ -170,8 +163,8 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 	        | 
 	        */
 	        $this->addaction = array();
-			$this->addaction[] = ['label'=>'Payment','url'=>CRUDBooster::mainpath('payment/[id]').'?return_url='.Request::url(),'icon'=>'fa fa-money','color'=>'danger','showIf'=>"in_array([status], ['Unpaid', 'Checking', 'Proccess','Shipping','Success'])"];
-			$this->addaction[] = ['label'=>'Shipping','url'=>CRUDBooster::mainpath('shipping/[id]').'?return_url='.Request::url(),'icon'=>'fa fa-road','color'=>'warning','showIf'=>"in_array([status], ['Proccess','Shipping','Success'])"];
+			$this->addaction[] = ['label'=>'Payment','url'=>CRUDBooster::mainpath('payment/[id]').'?return_url='.Request::url(),'icon'=>'fa fa-money','color'=>'danger','showIf'=>"in_array([status], ['Unpaid', 'Checking', 'Process','Shipping','Success'])"];
+			$this->addaction[] = ['label'=>'Shipping','url'=>CRUDBooster::mainpath('shipping/[id]').'?return_url='.Request::url(),'icon'=>'fa fa-road','color'=>'warning','showIf'=>"in_array([status], ['Process','Shipping','Success'])"];
 
 
 	        /* 
@@ -437,13 +430,13 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 			CB::redirectBack('Set transaction to checking successfully!', 'success');
 		}
 
-		public function getProccess($id) {
+		public function getProcess($id) {
 			DB::table('transactions')->where('id', $id)->update([
-				'status' => 'Proccess',
+				'status' => 'Process',
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
 
-			CB::redirectBack('Set transaction to proccess successfully!', 'success');
+			CB::redirectBack('Set transaction to process successfully!', 'success');
 		}
 
 		public function getPayment($id) {
@@ -502,7 +495,7 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 
 		public function getApprove($id) {
 			DB::table('transactions')->where('id', $id)->update([
-				'status' => 'Proccess',
+				'status' => 'Process',
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
 
@@ -511,7 +504,7 @@ class AdminTransactionsController extends \crocodicstudio\crudbooster\controller
 				'updated_at' => date('Y-m-d H:i:s'),
 			]);
 
-			CB::redirectBack('Set transaction to proccess successfully!', 'success');
+			CB::redirectBack('Set transaction to process successfully!', 'success');
 		}
 
 		public function getReject($id) {

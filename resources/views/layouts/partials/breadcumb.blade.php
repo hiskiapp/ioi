@@ -4,7 +4,7 @@
         <div class="breadcrumb-content text-center">
             <h2>@yield('title')</h2>
             <ul>
-                <li><a href="#">home</a></li>
+                <li><a href="{{ url('/') }}">home</a></li>
                 <li>
                     @if (isset($parent))
                         {{ $parent }}

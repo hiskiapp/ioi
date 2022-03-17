@@ -13,7 +13,7 @@
                             <li><a href="{{ url('/') }}">home</a></li>
                             <li><a href="{{ url('products') }}">products</a></li>
                             @auth
-                                <li><a href="{{ url('orders') }}"> Orders </a></li>
+                                <li><a href="{{ url('transactions') }}"> Transactions </a></li>
                                 <li><a href="{{ url('account') }}"> My Account </a></li>
                             @endauth
                         </ul>
@@ -82,7 +82,7 @@
                                 <li><a href="{{ url('/') }}">HOME</a></li>
                                 <li><a href="{{ url('products') }}"> Products </a></li>
                                 @auth
-                                    <li><a href="{{ url('orders') }}"> Orders </a></li>
+                                    <li><a href="{{ url('transactions') }}"> Transactions </a></li>
                                     <li><a href="{{ url('account') }}"> My Account </a></li>
                                 @endauth
                             </ul>

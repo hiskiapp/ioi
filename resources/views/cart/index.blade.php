@@ -54,8 +54,10 @@
                                                 class="amount">{{ format_currency($item->products_price) }}</span>
                                         </td>
                                         <td class="product-quantity">
+                                            <span>Stock: {{ $item->products_stock }}</span><br>
                                             <input value="{{ $item->total_order }}" type="number" min="1"
-                                                class="items-total" data-id="{{ $item->id }}">
+                                                max="{{ $item->products_stock }}" class="items-total mt-2"
+                                                data-id="{{ $item->id }}">
                                         </td>
                                         @php
                                             $subtotal = $item->products_price * $item->total_order;
@@ -88,7 +90,19 @@
         <script>
             $(".items-total").on('keyup input', function() {
                 var id = $(this).attr("data-id");
-                var total_order = $(this).val();
+
+                var max = parseInt($(this).attr('max'));
+                var min = parseInt($(this).attr('min'));
+                var this_val = $(this).val();
+                if ($(this).val() > max) {
+                    $(this).val(max);
+                    this_val = max;
+                } else if ($(this).val() < min) {
+                    $(this).val(min);
+                    this_val = min;
+                }
+
+                var total_order = this_val;
 
                 $.ajax({
                     url: "/cart/qty",

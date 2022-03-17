@@ -32,6 +32,6 @@ class CheckoutController extends Controller
 
         TransactionsService::checkout(auth()->id());
 
-        return redirect()->route('orders.index')->with('status', 'Your order has been placed!');
+        return redirect()->route('transactions.index')->with('success', 'Your order has been placed!');
     }
 }

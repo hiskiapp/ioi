@@ -22,8 +22,8 @@
                             <div class="sidebar-categories">
                                 <ul>
                                     @foreach ($categories as $category)
-                                        <li><a
-                                                href="{{ route('products.index', ['categories_id' => $category->id, 'q' => g('q'), 'sort' => g('sort')]) }}">{{ $category->name }}
+                                        <li><a href="{{ route('products.index', ['categories_id' => $category->id, 'q' => g('q'), 'sort' => g('sort')]) }}"
+                                                @if (g('categories_id') == $category->id) style="font-weight: bold;" @endif>{{ $category->name }}
                                                 <span>{{ $category->total_products }}</span></a></li>
                                     @endforeach
                                 </ul>
