@@ -21,7 +21,7 @@ class CartController extends Controller
         $product = Products::find($products_id);
         if (!$product) abort(404, 'Product not found');
 
-        CartsService::addProduct(auth()->id(), $product->id);
+        CartsService::addProduct(auth()->id(), $product->id, g('qty', 1));
 
         return redirect()->route('cart.index')->with(['success' => 'Item added!']);
     }

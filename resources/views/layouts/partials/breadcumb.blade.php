@@ -5,7 +5,13 @@
             <h2>@yield('title')</h2>
             <ul>
                 <li><a href="#">home</a></li>
-                <li> @yield('title') </li>
+                <li>
+                    @if (isset($parent))
+                        {{ $parent }}
+                    @else
+                        @yield('title')
+                    @endif
+                </li>
             </ul>
         </div>
     </div>

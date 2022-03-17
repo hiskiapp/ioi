@@ -89,7 +89,7 @@ class Products extends ProductsModel
         $product = DB::table('products')
             ->join('categories', 'categories.id', '=', 'products.categories_id')
             ->join('sub_categories', 'sub_categories.id', '=', 'products.sub_categories_id')
-            ->select('products.*', 'categories.name as categories_name', 'sub_categories.name as sub_categories_name')
+            ->select('products.*', 'categories.id as categories_id', 'categories.name as categories_name', 'sub_categories.name as sub_categories_name')
             ->where('permalink', $permalink)
             ->first();
 
@@ -104,10 +104,19 @@ class Products extends ProductsModel
     {
         $categories_id = optional(DB::table('products')->where('id', $id)->first())->categories_id;
         $related_products = DB::table('products')
+            ->where('id', '!=', $id)
             ->where('categories_id', $categories_id)
             ->inRandomOrder()
             ->limit($limit)
             ->get();
+
+        $images = DB::table('product_images')
+            ->whereIn('products_id', pluck_id($related_products))
+            ->get();
+
+        foreach ($related_products as $product) {
+            $product->image = optional($images->where('products_id', $product->id)->first())->src;
+        }
 
         return $related_products;
     }
