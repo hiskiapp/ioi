@@ -107,6 +107,23 @@
                                                             <img src="{{ asset($product->image) }}" alt="">
                                                         </a>
                                                     </div>
+                                                    <div class="product-action">
+                                                        <a class="animate-left" title="Add To Cart"
+                                                            href="javascript:void(0);"
+                                                            onclick="event.preventDefault();document.getElementById('product_{{ $loop->iteration }}').submit();">
+                                                            <i class="pe-7s-cart"></i>
+                                                        </a>
+                                                        <form id="product_{{ $loop->iteration }}"
+                                                            action="{{ route('cart.add', $product->id) }}" method="POST"
+                                                            class="d-none">
+                                                            @csrf
+
+                                                        </form>
+                                                        <a class="animate-right" title="View Product"
+                                                            href="{{ url("products/$product->permalink") }}">
+                                                            <i class="pe-7s-look"></i>
+                                                        </a>
+                                                    </div>
                                                     <div class="product-content">
                                                         <h4><a href="{{ url("products/$product->permalink") }}">{{ $product->name }}
                                                             </a></h4>

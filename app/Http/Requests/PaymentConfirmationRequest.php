@@ -24,9 +24,10 @@ class PaymentConfirmationRequest extends FormRequest
     public function rules()
     {
         return [
-            'transactions_id' => 'required|exists:transactions,id',
             'proof' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'sender_name' => 'required|string|max:255',
+            'sender_number' => 'required|string|max:255',
+            'payment_methods_id' => 'required|exists:payment_methods,id'
         ];
     }
 }

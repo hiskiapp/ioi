@@ -91,17 +91,6 @@
             $(".items-total").on('keyup input', function() {
                 var id = $(this).attr("data-id");
 
-                var max = parseInt($(this).attr('max'));
-                var min = parseInt($(this).attr('min'));
-                var this_val = $(this).val();
-                if ($(this).val() > max) {
-                    $(this).val(max);
-                    this_val = max;
-                } else if ($(this).val() < min) {
-                    $(this).val(min);
-                    this_val = min;
-                }
-
                 var total_order = this_val;
 
                 $.ajax({
@@ -118,6 +107,19 @@
                         $('#cart-totals').html(data.total);
                     }
                 });
+            });
+
+            $(".items-total").on('change', function() {
+                var max = parseInt($(this).attr('max'));
+                var min = parseInt($(this).attr('min'));
+                var this_val = $(this).val();
+                if ($(this).val() > max) {
+                    $(this).val(max);
+                    this_val = max;
+                } else if ($(this).val() < min) {
+                    $(this).val(min);
+                    this_val = min;
+                }
             });
         </script>
     @endpush

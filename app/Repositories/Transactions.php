@@ -40,15 +40,22 @@ class Transactions extends TransactionsModel
             ->join('address', 'address.id', 'transactions.address_id')
             ->where('transactions.users_id', $users_id)
             ->where('transactions.code', $code)
+            ->select('transactions.*', 'address.main_address', 'address.receive_name', 'address.phone', 'address.province', 'address.city', 'address.district', 'address.detail', 'address.note', 'payment_methods.name as payment_methods_name', 'payment_methods.id as payment_methods_id')
             ->first();
-
-        abort_if(!$transaction, 404, 'Transaction Not Found');
 
         $transaction->items = DB::table('transaction_items')
             ->join('products', 'products.id', 'transaction_items.products_id')
             ->where('transaction_items.transactions_id', $transaction->id)
-            ->select('transaction_items.*', 'products.id as products_id', 'products.name as products_name',  'products.permalink as products_permalink')
+            ->select('transaction_items.*', 'products.id as products_id', 'products.name as products_name',  'products.permalink as products_permalink', 'products.price as products_price')
             ->get();
+
+        $transaction->payment = DB::table('payment_confirmations')
+            ->where('transactions_id', $transaction->id)
+            ->first();
+
+        $transaction->shipping = DB::table('shippings')
+            ->where('transactions_id', $transaction->id)
+            ->first();
 
         foreach ($transaction->items as $row) {
             $row->image = ProductImages::getFirstSrcByProductsId($row->products_id);

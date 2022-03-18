@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Oke Mantap')
+@section('title', $product->name)
 @section('content')
     @include('layouts.partials.breadcumb', [
         'bg' => get_setting('breadcum_products'),
@@ -177,7 +177,7 @@
     @push('js')
         <script>
             $(function() {
-                $('input[name="qty_input"]').on('keyup input', function(e) {
+                $('input[name="qty_input"]').on('change', function(e) {
                     var max = parseInt($(this).attr('max'));
                     var min = parseInt($(this).attr('min'));
                     var this_val = $(this).val();
