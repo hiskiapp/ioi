@@ -80,6 +80,12 @@
                         </div>
                         <div class="product-details-cati-tag mt-35">
                             <ul>
+                                <li class="categories-title">Location :</li>
+                                <li>{{ $product->location }}</li>
+                            </ul>
+                        </div>
+                        <div class="product-details-cati-tag mtb-10">
+                            <ul>
                                 <li class="categories-title">Size :</li>
                                 <li>{{ $product->size }}</li>
                             </ul>
@@ -102,23 +108,15 @@
                             <ul>
                                 <li class="categories-title">Share :</li>
                                 <li>
-                                    <a href="#">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(route('product.show', $product->permalink)) }}"
+                                        target="_blank">
                                         <i class="icofont icofont-social-facebook"></i>
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="http://twitter.com/share?url={{ urlencode(route('product.show', $product->permalink)) }}"
+                                        target="_blank">
                                         <i class="icofont icofont-social-twitter"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="icofont icofont-social-pinterest"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#">
-                                        <i class="icofont icofont-social-flikr"></i>
                                     </a>
                                 </li>
                             </ul>
