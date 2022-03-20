@@ -14,10 +14,12 @@ class ProductController extends Controller
         $search = g('q');
         $categories_id = g('categories_id');
         $sort = g('sort', 'asc');
+        $limit_products = (int) get_setting('pagination_products', 12);
+        $limit_top_products = (int) get_setting('limit_top_products', 4);
 
-        $data['popular_products'] = Products::findAllByPopularity(4);
+        $data['popular_products'] = Products::findAllByPopularity($limit_top_products);
         $data['count_products'] = Products::countAll();
-        $data['products'] = Products::search(12, $search, $categories_id, $sort);
+        $data['products'] = Products::search($limit_products, $search, $categories_id, $sort);
         $data['categories'] = Categories::findAllWithTotalProducts($search, false);
 
         return view('products.index', $data);
